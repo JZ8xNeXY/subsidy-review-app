@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans_JP } from "next/font/google";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
-import { ThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import theme from "@/theme/theme";
+import ThemeRegistry from "@/components/ThemeRegistry";
 import "./globals.css";
 
 const notoSansJP = Noto_Sans_JP({
@@ -26,10 +24,9 @@ export default function RootLayout({
     <html lang="ja" className={notoSansJP.className}>
       <body>
         <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>
-            <CssBaseline />
+          <ThemeRegistry>
             {children}
-          </ThemeProvider>
+          </ThemeRegistry>
         </AppRouterCacheProvider>
       </body>
     </html>
