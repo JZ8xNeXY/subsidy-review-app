@@ -40,14 +40,7 @@ export default function Home() {
         <Toolbar>
           <Typography variant="h1" component="h1" sx={{ flexGrow: 1, color: 'white' }}>
             審査アプリ
-            <Typography component="span" sx={{ ml: 1.5, fontSize: 12, opacity: 0.85, fontWeight: 300 }}>
-              区市町村連携環境政策高度化事業
-            </Typography>
           </Typography>
-          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center', fontSize: 12, opacity: 0.9 }}>
-            <Typography variant="caption">東京都環境局</Typography>
-            <Typography variant="caption">令和8年度</Typography>
-          </Box>
         </Toolbar>
       </AppBar>
 

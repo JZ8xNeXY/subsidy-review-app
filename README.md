@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 補助金審査アプリ
 
-## Getting Started
+補助金申請の審査を支援するWebアプリケーション。申請情報の入力、メニュー候補の提示、要件チェック、経費計算、判定結果の出力を行います。
 
-First, run the development server:
+## 機能
+
+- **申請情報入力**: 事業の基本情報を入力
+- **メニュー候補サジェスト**: キーワードマッチングで該当メニューを提示
+- **要件チェック**: 各メニューの要件適合性を確認
+- **経費チェック**: 経費計算と補助金額の自動算出
+- **判定結果出力**: 総合判定と所見をMarkdown形式で出力
+
+## 技術スタック
+
+- Next.js 14+ (App Router)
+- TypeScript
+- Material-UI v5
+- React Hooks
+
+## セットアップ
 
 ```bash
+# 依存関係のインストール
+npm install
+
+# 開発サーバーの起動
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+ブラウザで [http://localhost:3000](http://localhost:3000) を開いてください。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ビルド
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm start
+```
 
-## Learn More
+## プロジェクト構成
 
-To learn more about Next.js, take a look at the following resources:
+```
+/app                # Next.js App Router
+/components         # UIコンポーネント
+  /forms           # フォームコンポーネント
+  /review          # 審査関連コンポーネント
+/lib               # ビジネスロジック
+  /data            # データ定義
+  /logic           # 判定・計算ロジック
+/theme             # MUIテーマ設定
+/types             # TypeScript型定義
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ライセンス
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
