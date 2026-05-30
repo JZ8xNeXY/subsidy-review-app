@@ -39,7 +39,7 @@ export default function Home() {
       <AppBar position="sticky" sx={{ bgcolor: 'primary.dark' }}>
         <Toolbar>
           <Typography variant="h1" component="h1" sx={{ flexGrow: 1, color: 'white' }}>
-            補助金審査支援アプリ
+            審査アプリ
             <Typography component="span" sx={{ ml: 1.5, fontSize: 12, opacity: 0.85, fontWeight: 300 }}>
               区市町村連携環境政策高度化事業
             </Typography>

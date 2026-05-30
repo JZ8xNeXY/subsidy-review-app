@@ -13,7 +13,7 @@ const notoSansJP = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  title: "補助金審査支援アプリ | 区市町村連携環境政策高度化事業",
+  title: "審査アプリ | 区市町村連携環境政策高度化事業",
   description: "東京都環境局 区市町村連携環境政策高度化事業の補助金審査を支援するWebアプリケーション",
 };
 
