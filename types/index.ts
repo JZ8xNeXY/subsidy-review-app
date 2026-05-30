@@ -1,5 +1,5 @@
 // /types/index.ts
-// 区市町村連携環境政策高度化事業 補助金審査支援アプリ 型定義
+// 補助金審査支援アプリ 型定義
 
 // ========================================================================
 // 経費科目
@@ -50,7 +50,7 @@ export type UpperLimit = {
   scope: string;
   /** 千円単位 */
   amount: number;
-  /** "千円/区市町村等", "千円/件", "千円/台" 等 */
+  /** "千円/自治体", "千円/件", "千円/台" 等 */
   unit: string;
 };
 
@@ -141,7 +141,7 @@ export type MenuCheckState = {
 
 export type ApplicationInfo = {
   name: string;        // 事業名
-  applicant: string;   // 申請者(区市町村名)
+  applicant: string;   // 申請者名
   purpose: string;     // 目的
   content: string;     // 取組内容
   structure: string;   // 実施体制

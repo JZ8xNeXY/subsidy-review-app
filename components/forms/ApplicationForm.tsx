@@ -50,12 +50,12 @@ export default function ApplicationForm({ data, onChange }: ApplicationFormProps
               placeholder="例: ○○区カーボンニュートラル推進事業"
             />
             <TextField
-              label="申請者（区市町村名）"
+              label="申請者名"
               required
               fullWidth
               value={data.applicant}
               onChange={handleChange('applicant')}
-              placeholder="例: ○○区"
+              placeholder="例: ○○市"
             />
           </Box>
 
