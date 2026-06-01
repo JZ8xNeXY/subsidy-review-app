@@ -42,18 +42,39 @@ export function suggestMenus(
 
     for (const keyword of menu.keywords) {
       const normalizedKeyword = normalizeText(keyword);
-      // 完全一致または部分一致
-      if (normalizedText.includes(normalizedKeyword) || normalizedKeyword.includes(normalizedText.slice(0, 4))) {
+
+      // 完全一致
+      if (normalizedText.includes(normalizedKeyword)) {
+        matchedKeywords.push(keyword);
+        score += 3;
+      }
+      // 入力文字列がキーワードに含まれる（逆方向マッチ）
+      else if (normalizedKeyword.includes(normalizedText) && normalizedText.length >= 2) {
         matchedKeywords.push(keyword);
         score += 2;
-      } else {
-        // 部分的な文字列マッチ（2文字以上）
-        for (let i = 0; i < keyword.length - 1; i++) {
-          const partial = normalizeText(keyword.slice(i, i + 3));
-          if (partial.length >= 2 && normalizedText.includes(partial)) {
+      }
+      // 2文字以上の部分一致（n-gramアプローチ）
+      else if (normalizedText.length >= 2) {
+        let matched = false;
+        // キーワードを2文字ずつスライドして検索
+        for (let i = 0; i <= keyword.length - 2; i++) {
+          const bigram = normalizeText(keyword.slice(i, i + 2));
+          if (bigram.length === 2 && normalizedText.includes(bigram)) {
             matchedKeywords.push(keyword);
             score += 1;
+            matched = true;
             break;
+          }
+        }
+        if (!matched && normalizedText.length >= 3) {
+          // 3文字の部分一致も試す
+          for (let i = 0; i <= keyword.length - 3; i++) {
+            const trigram = normalizeText(keyword.slice(i, i + 3));
+            if (trigram.length === 3 && normalizedText.includes(trigram)) {
+              matchedKeywords.push(keyword);
+              score += 1;
+              break;
+            }
           }
         }
       }
@@ -61,11 +82,29 @@ export function suggestMenus(
 
     // メニュー名とのマッチング（高配点）
     const normalizedMenuName = normalizeText(menu.name);
-    const menuNameWords = extractWords(normalizedMenuName);
-    for (const word of menuNameWords) {
-      if (word.length >= 2 && normalizedText.includes(word)) {
-        score += 3;
-        matchedKeywords.push(`メニュー名: ${word}`);
+    // 完全一致または双方向部分一致
+    if (normalizedText.includes(normalizedMenuName) || normalizedMenuName.includes(normalizedText)) {
+      score += 5;
+      matchedKeywords.push(`メニュー名: ${menu.name}`);
+    } else {
+      // 単語単位でのマッチング
+      const menuNameWords = extractWords(normalizedMenuName);
+      for (const word of menuNameWords) {
+        if (word.length >= 2 && (normalizedText.includes(word) || word.includes(normalizedText))) {
+          score += 3;
+          matchedKeywords.push(`メニュー名: ${word}`);
+        }
+      }
+      // 2文字単位での部分マッチ
+      if (normalizedText.length >= 2) {
+        for (let i = 0; i <= menu.name.length - 2; i++) {
+          const bigram = normalizeText(menu.name.slice(i, i + 2));
+          if (bigram.length === 2 && normalizedText.includes(bigram)) {
+            score += 2;
+            matchedKeywords.push(`メニュー名部分: ${menu.name.slice(i, i + 2)}`);
+            break;
+          }
+        }
       }
     }
 
@@ -73,9 +112,20 @@ export function suggestMenus(
     const normalizedPurpose = normalizeText(menu.purpose);
     const purposeWords = extractWords(normalizedPurpose);
     for (const word of purposeWords) {
-      if (word.length >= 2 && normalizedText.includes(word)) {
+      if (word.length >= 2 && (normalizedText.includes(word) || word.includes(normalizedText))) {
         score += 2;
         matchedKeywords.push(`目的: ${word}`);
+      }
+    }
+    // 目的文の2文字部分マッチ
+    if (normalizedText.length >= 2 && score < 3) {
+      for (let i = 0; i <= menu.purpose.length - 2; i++) {
+        const bigram = normalizeText(menu.purpose.slice(i, i + 2));
+        if (bigram.length === 2 && normalizedText.includes(bigram)) {
+          score += 1;
+          matchedKeywords.push(`目的部分: ${menu.purpose.slice(i, i + 2)}`);
+          break;
+        }
       }
     }
 
