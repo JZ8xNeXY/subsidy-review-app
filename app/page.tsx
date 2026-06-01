@@ -10,8 +10,10 @@ import {
   Typography,
 } from '@mui/material';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ReviewStepper from '@/components/review/ReviewStepper';
 import ApplicationForm from '@/components/forms/ApplicationForm';
+import MenuSuggest from '@/components/review/MenuSuggest';
 import { ApplicationInfo } from '@/types';
 
 export default function Home() {
@@ -23,6 +25,7 @@ export default function Home() {
     content: '',
     structure: '',
   });
+  const [selectedMenuIds, setSelectedMenuIds] = useState<string[]>([]);
 
   const handleNext = () => {
     setActiveStep((prev) => prev + 1);
@@ -30,6 +33,11 @@ export default function Home() {
 
   const handleBack = () => {
     setActiveStep((prev) => prev - 1);
+  };
+
+  const handleMenusSelected = (menuIds: string[]) => {
+    setSelectedMenuIds(menuIds);
+    handleNext();
   };
 
   const isStep1Valid = applicationData.name && applicationData.applicant && applicationData.content;
@@ -71,16 +79,22 @@ export default function Home() {
           )}
 
           {activeStep === 1 && (
-            <Box sx={{ bgcolor: 'background.paper', p: 4, borderRadius: 1 }}>
-              <Typography variant="h2">メニュー選択（開発中）</Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-                この画面では、入力された申請情報からキーワードマッチングを行い、該当しそうな補助メニュー候補を提示します。
-              </Typography>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
-                <Button onClick={handleBack}>戻る</Button>
-                <Button variant="contained" onClick={handleNext}>次へ</Button>
+            <>
+              <MenuSuggest
+                applicationData={applicationData}
+                onMenusSelected={handleMenusSelected}
+              />
+
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3, pt: 2.5, borderTop: 1, borderColor: 'divider' }}>
+                <Button
+                  startIcon={<ArrowBackIcon />}
+                  onClick={handleBack}
+                  size="large"
+                >
+                  戻る
+                </Button>
               </Box>
-            </Box>
+            </>
           )}
 
           {activeStep === 2 && (
@@ -89,8 +103,11 @@ export default function Home() {
               <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
                 この画面では、選択されたメニューの要件に対して適合性をチェックします。
               </Typography>
+              <Typography variant="body2" sx={{ mt: 2 }}>
+                選択済みメニュー: {selectedMenuIds.length}件
+              </Typography>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
-                <Button onClick={handleBack}>戻る</Button>
+                <Button startIcon={<ArrowBackIcon />} onClick={handleBack}>戻る</Button>
                 <Button variant="contained" onClick={handleNext}>次へ</Button>
               </Box>
             </Box>
