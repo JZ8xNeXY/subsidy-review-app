@@ -36,40 +36,54 @@ export function suggestMenus(
       continue;
     }
 
-    // キーワードマッチング
+    // キーワードマッチング（部分一致も対応）
     const matchedKeywords: string[] = [];
     let score = 0;
 
     for (const keyword of menu.keywords) {
       const normalizedKeyword = normalizeText(keyword);
-      if (normalizedText.includes(normalizedKeyword)) {
+      // 完全一致または部分一致
+      if (normalizedText.includes(normalizedKeyword) || normalizedKeyword.includes(normalizedText.slice(0, 4))) {
         matchedKeywords.push(keyword);
-        score += 1;
+        score += 2;
+      } else {
+        // 部分的な文字列マッチ（2文字以上）
+        for (let i = 0; i < keyword.length - 1; i++) {
+          const partial = normalizeText(keyword.slice(i, i + 3));
+          if (partial.length >= 2 && normalizedText.includes(partial)) {
+            matchedKeywords.push(keyword);
+            score += 1;
+            break;
+          }
+        }
       }
     }
 
     // メニュー名とのマッチング（高配点）
     const normalizedMenuName = normalizeText(menu.name);
-    const menuNameWords = normalizedMenuName.split(/\s+/);
+    const menuNameWords = extractWords(normalizedMenuName);
     for (const word of menuNameWords) {
       if (word.length >= 2 && normalizedText.includes(word)) {
         score += 3;
-        if (!matchedKeywords.includes(menu.name)) {
-          matchedKeywords.push(`メニュー名: ${word}`);
-        }
+        matchedKeywords.push(`メニュー名: ${word}`);
       }
     }
 
     // 目的文とのマッチング（中配点）
     const normalizedPurpose = normalizeText(menu.purpose);
-    const purposeWords = normalizedPurpose.split(/\s+/).filter(w => w.length >= 3);
+    const purposeWords = extractWords(normalizedPurpose);
     for (const word of purposeWords) {
-      if (normalizedText.includes(word)) {
+      if (word.length >= 2 && normalizedText.includes(word)) {
         score += 2;
-        if (!matchedKeywords.includes(word)) {
-          matchedKeywords.push(`目的: ${word}`);
-        }
+        matchedKeywords.push(`目的: ${word}`);
       }
+    }
+
+    // コードとのマッチング
+    const codeMatch = menu.code.replace(/[()]/g, '');
+    if (normalizedText.includes(normalizeText(codeMatch))) {
+      score += 5;
+      matchedKeywords.push(`コード: ${menu.code}`);
     }
 
     // スコアが1以上ならサジェスト候補に追加
@@ -94,12 +108,27 @@ export function suggestMenus(
 }
 
 /**
- * テキストを正規化（全角→半角、小文字化、記号除去）
+ * テキストを正規化（全角→半角、小文字化、スペース除去）
  */
 function normalizeText(text: string): string {
   return text
     .toLowerCase()
     .replace(/[Ａ-Ｚａ-ｚ０-９]/g, (s) => String.fromCharCode(s.charCodeAt(0) - 0xfee0))
-    .replace(/[　\s]+/g, '')
-    .replace(/[^\w\u3040-\u309f\u30a0-\u30ff\u4e00-\u9faf]+/g, '');
+    .replace(/[　\s\-ー・]/g, '')
+    .trim();
+}
+
+/**
+ * テキストから意味のある単語を抽出
+ */
+function extractWords(text: string): string[] {
+  const words: string[] = [];
+
+  // 2文字以上の連続する文字列を抽出
+  const matches = text.match(/[\u3040-\u309f\u30a0-\u30ff\u4e00-\u9fafa-z]{2,}/g);
+  if (matches) {
+    words.push(...matches);
+  }
+
+  return words.filter(w => w.length >= 2);
 }
