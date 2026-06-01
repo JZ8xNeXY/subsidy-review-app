@@ -14,6 +14,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ReviewStepper from '@/components/review/ReviewStepper';
 import ApplicationForm from '@/components/forms/ApplicationForm';
 import MenuSuggest from '@/components/review/MenuSuggest';
+import RequirementChecklist, { MenuCheckData } from '@/components/review/RequirementChecklist';
 import { ApplicationInfo } from '@/types';
 
 export default function Home() {
@@ -26,6 +27,7 @@ export default function Home() {
     structure: '',
   });
   const [selectedMenuIds, setSelectedMenuIds] = useState<string[]>([]);
+  const [checkStates, setCheckStates] = useState<Record<string, MenuCheckData>>({});
 
   const handleNext = () => {
     setActiveStep((prev) => prev + 1);
@@ -98,19 +100,31 @@ export default function Home() {
           )}
 
           {activeStep === 2 && (
-            <Box sx={{ bgcolor: 'background.paper', p: 4, borderRadius: 1 }}>
-              <Typography variant="h2">要件チェック（開発中）</Typography>
-              <Typography variant="body2" color="text.secondary" sx={{ mt: 2 }}>
-                この画面では、選択されたメニューの要件に対して適合性をチェックします。
-              </Typography>
-              <Typography variant="body2" sx={{ mt: 2 }}>
-                選択済みメニュー: {selectedMenuIds.length}件
-              </Typography>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
-                <Button startIcon={<ArrowBackIcon />} onClick={handleBack}>戻る</Button>
-                <Button variant="contained" onClick={handleNext}>次へ</Button>
+            <>
+              <RequirementChecklist
+                menuIds={selectedMenuIds}
+                checkStates={checkStates}
+                onCheckStatesChange={setCheckStates}
+              />
+
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3, pt: 2.5, borderTop: 1, borderColor: 'divider' }}>
+                <Button
+                  startIcon={<ArrowBackIcon />}
+                  onClick={handleBack}
+                  size="large"
+                >
+                  戻る
+                </Button>
+                <Button
+                  variant="contained"
+                  endIcon={<ArrowForwardIcon />}
+                  onClick={handleNext}
+                  size="large"
+                >
+                  経費入力へ
+                </Button>
               </Box>
-            </Box>
+            </>
           )}
 
           {activeStep === 3 && (
@@ -120,8 +134,8 @@ export default function Home() {
                 この画面では、経費の入力と補助金額の自動計算を行います。
               </Typography>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
-                <Button onClick={handleBack}>戻る</Button>
-                <Button variant="contained" onClick={handleNext}>次へ</Button>
+                <Button startIcon={<ArrowBackIcon />} onClick={handleBack}>戻る</Button>
+                <Button variant="contained" endIcon={<ArrowForwardIcon />} onClick={handleNext}>次へ</Button>
               </Box>
             </Box>
           )}
@@ -133,7 +147,7 @@ export default function Home() {
                 この画面では、総合的な判定結果と所見を表示します。
               </Typography>
               <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 3 }}>
-                <Button onClick={handleBack}>戻る</Button>
+                <Button startIcon={<ArrowBackIcon />} onClick={handleBack}>戻る</Button>
                 <Button variant="contained" onClick={() => setActiveStep(0)}>最初に戻る</Button>
               </Box>
             </Box>
