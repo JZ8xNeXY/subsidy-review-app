@@ -47,12 +47,13 @@ export default function ExpenseChecker({
 
   const handleExpenseChange = (menuId: string, category: ExpenseCategory, value: string) => {
     const amount = value ? parseInt(value.replace(/,/g, '')) : 0;
+    const currentState = expenseStates[menuId] || { expenses: {}, deductions: 0, unitCounts: {} };
     const newStates = {
       ...expenseStates,
       [menuId]: {
-        ...expenseStates[menuId],
+        ...currentState,
         expenses: {
-          ...expenseStates[menuId]?.expenses,
+          ...currentState.expenses,
           [category]: amount,
         },
       },
@@ -62,10 +63,11 @@ export default function ExpenseChecker({
 
   const handleDeductionChange = (menuId: string, value: string) => {
     const amount = value ? parseInt(value.replace(/,/g, '')) : 0;
+    const currentState = expenseStates[menuId] || { expenses: {}, deductions: 0, unitCounts: {} };
     const newStates = {
       ...expenseStates,
       [menuId]: {
-        ...expenseStates[menuId],
+        ...currentState,
         deductions: amount,
       },
     };
@@ -74,12 +76,13 @@ export default function ExpenseChecker({
 
   const handleUnitCountChange = (menuId: string, scope: string, value: string) => {
     const count = value ? parseInt(value) : 0;
+    const currentState = expenseStates[menuId] || { expenses: {}, deductions: 0, unitCounts: {} };
     const newStates = {
       ...expenseStates,
       [menuId]: {
-        ...expenseStates[menuId],
+        ...currentState,
         unitCounts: {
-          ...expenseStates[menuId]?.unitCounts,
+          ...currentState.unitCounts,
           [scope]: count,
         },
       },

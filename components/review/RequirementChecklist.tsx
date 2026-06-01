@@ -40,12 +40,13 @@ export default function RequirementChecklist({
   const currentMenu = menus[activeTab];
 
   const handleResultChange = (menuId: string, requirementId: string, result: CheckResult) => {
+    const currentState = checkStates[menuId] || { requirementResults: {}, requirementNotes: {} };
     const newStates = {
       ...checkStates,
       [menuId]: {
-        ...checkStates[menuId],
+        ...currentState,
         requirementResults: {
-          ...checkStates[menuId]?.requirementResults,
+          ...currentState.requirementResults,
           [requirementId]: result,
         },
       },
@@ -54,12 +55,13 @@ export default function RequirementChecklist({
   };
 
   const handleNoteChange = (menuId: string, requirementId: string, note: string) => {
+    const currentState = checkStates[menuId] || { requirementResults: {}, requirementNotes: {} };
     const newStates = {
       ...checkStates,
       [menuId]: {
-        ...checkStates[menuId],
+        ...currentState,
         requirementNotes: {
-          ...checkStates[menuId]?.requirementNotes,
+          ...currentState.requirementNotes,
           [requirementId]: note,
         },
       },
