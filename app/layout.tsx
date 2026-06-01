@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
-import { Noto_Sans_JP } from "next/font/google";
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v15-appRouter';
 import ThemeRegistry from "@/components/ThemeRegistry";
+import "@fontsource/noto-sans-jp/300.css";
+import "@fontsource/noto-sans-jp/400.css";
+import "@fontsource/noto-sans-jp/500.css";
+import "@fontsource/noto-sans-jp/700.css";
 import "./globals.css";
-
-const notoSansJP = Noto_Sans_JP({
-  weight: ['300', '400', '500', '700'],
-  subsets: ['latin'],
-  display: 'swap',
-});
 
 export const metadata: Metadata = {
   title: "審査アプリ",
@@ -21,7 +18,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ja" className={notoSansJP.className}>
+    <html lang="ja">
       <body>
         <AppRouterCacheProvider>
           <ThemeRegistry>

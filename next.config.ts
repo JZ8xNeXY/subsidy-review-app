@@ -1,7 +1,7 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  // Use Webpack for builds (Turbopack has font loading issues)
 };
 
 export default nextConfig;
