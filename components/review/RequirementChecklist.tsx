@@ -156,8 +156,15 @@ export default function RequirementChecklist({
     const logicLabel = group.logic === 'all' ? '全て必須' : 'いずれか1つ以上';
     const logicColor = group.logic === 'all' ? 'secondary.main' : 'info.main';
 
+    // 条件付き要件の場合、条件が満たされているかチェック
+    const currentState = checkStates[menuId] || { requirementResults: {}, requirementNotes: {} };
+    const isConditional = !!group.conditionalOn;
+    const conditionMet = isConditional && group.conditionalOn
+      ? currentState.requirementResults[group.conditionalOn] === 'ok'
+      : true;
+
     return (
-      <Box key={group.id} sx={{ mb: 3 }}>
+      <Box key={group.id} sx={{ mb: 3, opacity: isConditional && !conditionMet ? 0.5 : 1 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: 2, pb: 1, borderBottom: 2, borderColor: 'primary.main' }}>
           <Typography variant="h6" sx={{ fontSize: '16px', fontWeight: 700, color: 'primary.dark' }}>
             {group.label}
@@ -173,6 +180,19 @@ export default function RequirementChecklist({
               height: 22,
             }}
           />
+          {isConditional && !conditionMet && (
+            <Chip
+              label="条件未達のため評価対象外"
+              size="small"
+              sx={{
+                bgcolor: 'grey.400',
+                color: 'white',
+                fontWeight: 600,
+                fontSize: '10px',
+                height: 22,
+              }}
+            />
+          )}
         </Box>
 
         {group.requirements.map(req => renderRequirement(req, menuId))}

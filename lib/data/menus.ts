@@ -754,6 +754,7 @@ export const generalMenus: SubsidyMenu[] = [
         id: "post-action",
         label: "イ 防除方針の作成(ア(ｳ)を実施する場合)",
         logic: "all",
+        conditionalOn: "g14-a-iii",
         requirements: [
           { id: "g14-b", code: "イ", label: "補助事業完了後の防除方針作成", description: "ア(ｳ)実施の場合、取組結果を踏まえ防除計画区域における対象種の根絶を前提とした補助事業完了後の防除方針を作成(補助事業完了までに根絶確認の場合除く)。" },
         ],

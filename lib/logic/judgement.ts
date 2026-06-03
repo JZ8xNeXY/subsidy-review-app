@@ -22,6 +22,11 @@ export function judgeRequirements(
 
   // 核心要件グループ（ア）の判定
   for (const group of menu.requirementGroups) {
+    // 条件付きグループの場合、条件要件がokでなければスキップ
+    if (group.conditionalOn && requirementResults[group.conditionalOn] !== 'ok') {
+      continue;
+    }
+
     const groupResult = judgeRequirementGroup(group, requirementResults);
 
     if (groupResult.verdict === 'ng') {

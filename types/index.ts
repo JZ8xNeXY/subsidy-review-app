@@ -78,6 +78,8 @@ export type RequirementGroup = {
   /** "all" = 全て満たす必要、"any" = いずれか1つ以上で可 */
   logic: "all" | "any";
   requirements: Requirement[];
+  /** 条件付き要件: 指定された要件IDが"ok"の場合のみこのグループを評価 */
+  conditionalOn?: string;
 };
 
 // ========================================================================
